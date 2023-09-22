@@ -72,23 +72,35 @@ function KanjiDetail({ kanji }: { kanji: string }) {
       metadata={
         <List.Item.Detail.Metadata>
           <List.Item.Detail.Metadata.Label title="Kanji" text={kanji} />
-          <List.Item.Detail.Metadata.Label title="Keyword" text={query.data?.heisig_en || ""} />
-          <List.Item.Detail.Metadata.Label title="Grade" text={query.data?.grade?.toString(10) || "?"} />
+          {query.data?.heisig_en && <List.Item.Detail.Metadata.Label title="Keyword" text={query.data.heisig_en} />}
+          {query.data?.grade != null && (
+            <List.Item.Detail.Metadata.Label title="Grade" text={query.data.grade.toString(10)} />
+          )}
           <List.Item.Detail.Metadata.Separator />
           <List.Item.Detail.Metadata.Label title="Meanings" />
           {query.data?.meanings.map((meaning) => (
             <List.Item.Detail.Metadata.Label key={meaning} title={meaning} />
           ))}
-          <List.Item.Detail.Metadata.Separator />
-          <List.Item.Detail.Metadata.Label title="Kun-yomi readings" />
-          {query.data?.kun_readings.map((reading) => (
-            <List.Item.Detail.Metadata.Label key={reading} title={reading} />
-          ))}
-          <List.Item.Detail.Metadata.Separator />
-          <List.Item.Detail.Metadata.Label title="On-yomi readings" />
-          {query.data?.on_readings.map((reading) => (
-            <List.Item.Detail.Metadata.Label key={reading} title={reading} />
-          ))}
+
+          {query.data && (query.data.kun_readings || []).length > 0 && (
+            <>
+              <List.Item.Detail.Metadata.Separator />
+              <List.Item.Detail.Metadata.Label title="Kun'yomi readings" />
+              {query.data.kun_readings.map((reading) => (
+                <List.Item.Detail.Metadata.Label key={reading} title={reading} />
+              ))}
+            </>
+          )}
+
+          {query.data && (query.data.on_readings || []).length > 0 && (
+            <>
+              <List.Item.Detail.Metadata.Separator />
+              <List.Item.Detail.Metadata.Label title="On'yomi readings" />
+              {query.data.on_readings.map((reading) => (
+                <List.Item.Detail.Metadata.Label key={reading} title={reading} />
+              ))}
+            </>
+          )}
         </List.Item.Detail.Metadata>
       }
     />
