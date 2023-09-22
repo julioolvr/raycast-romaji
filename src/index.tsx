@@ -10,7 +10,6 @@ export default function Command() {
   const hiragana = wanakana.toHiragana(text);
   const katakana = wanakana.toKatakana(text);
 
-  // TODO: Debounce
   // TODO: Handle errors
   const query = useFetch<{ main_kanji: string[] }>(`https://kanjiapi.dev/v1/reading/${hiragana}`, {
     execute: hiragana.trim().length > 0 && wanakana.isKana(hiragana),
@@ -18,6 +17,7 @@ export default function Command() {
 
   return (
     <List
+      throttle
       searchText={text}
       onSearchTextChange={setText}
       isLoading={query.isLoading}
