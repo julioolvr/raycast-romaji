@@ -11,6 +11,7 @@ export default function Command() {
   const katakana = wanakana.toKatakana(text);
 
   // TODO: Debounce
+  // TODO: Handle errors
   const query = useFetch<{ main_kanji: string[] }>(`https://kanjiapi.dev/v1/reading/${hiragana}`, {
     execute: hiragana.trim().length > 0 && wanakana.isKana(hiragana),
   });
@@ -29,16 +30,17 @@ export default function Command() {
           <List.Item icon="list-icon.png" title={`Kana: ${kana}`} actions={<Actions text={kana} />} />
           <List.Item icon="list-icon.png" title={`Hiragana: ${hiragana}`} actions={<Actions text={hiragana} />} />
           <List.Item icon="list-icon.png" title={`Katakana: ${katakana}`} actions={<Actions text={katakana} />} />
-          {query.data?.main_kanji.map((kanji) => (
-            <List.Item
-              key={kanji}
-              icon="list-icon.png"
-              title={`Kanji: ${kanji}`}
-              actions={<Actions text={kanji} />}
-              detail={<KanjiDetail kanji={kanji} />}
-              id={`kanji:${kanji}`}
-            />
-          ))}
+          {wanakana.isKana(hiragana) &&
+            query.data?.main_kanji.map((kanji) => (
+              <List.Item
+                key={kanji}
+                icon="list-icon.png"
+                title={`Kanji: ${kanji}`}
+                actions={<Actions text={kanji} />}
+                detail={<KanjiDetail kanji={kanji} />}
+                id={`kanji:${kanji}`}
+              />
+            ))}
         </>
       )}
     </List>
