@@ -10,9 +10,11 @@ export default function Command() {
   const hiragana = wanakana.toHiragana(text);
   const katakana = wanakana.toKatakana(text);
 
-  // TODO: Handle errors
   const query = useFetch<{ main_kanji: string[] }>(`https://kanjiapi.dev/v1/reading/${hiragana}`, {
     execute: hiragana.trim().length > 0 && wanakana.isKana(hiragana),
+    onError: () => {
+      // Ignore errors, we'll show the Kana anyway
+    },
   });
 
   return (
